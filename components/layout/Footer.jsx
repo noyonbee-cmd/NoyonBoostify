@@ -49,6 +49,27 @@ export default function Footer() {
           <div style={{ display:'flex', alignItems:'center', gap:6 }}>Made with <span style={{ color:'#FF4A4A' }}>❤</span> in Bangladesh</div>
         </div>
 
+        {/* ── Meta Business Verification ── Remove after verification is complete ── */}
+        {siteConfig.verification?.showBusinessName && (
+          <div style={{
+            marginTop: 24,
+            padding: '10px 18px',
+            borderRadius: 8,
+            border: '1px solid rgba(45,140,255,0.15)',
+            background: 'rgba(45,140,255,0.04)',
+            textAlign: 'center',
+            color: 'var(--color-text-faint)',
+            fontSize: '0.78rem',
+            fontFamily: 'var(--font-mono)',
+            letterSpacing: '0.03em',
+          }}>
+            This website is operated by{' '}
+            <span style={{ color: 'var(--color-text-muted)', fontWeight: 600 }}>
+              {siteConfig.verification.legalBusinessName}
+            </span>
+          </div>
+        )}
+
       </div>
     </footer>
   );

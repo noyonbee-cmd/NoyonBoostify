@@ -3,6 +3,14 @@
 
 const siteConfig = {
 
+  // ── Meta Business Verification ─────────────────────────────────────────────
+  // Set to false and redeploy once Meta verification is complete.
+  verification: {
+    showBusinessName: true,
+    legalBusinessName: "Équinoxe Tv",
+  },
+
+
   brand: {
     fullName:    "Noyon Boostify × Naviro",
     shortName:   "Boostify",
