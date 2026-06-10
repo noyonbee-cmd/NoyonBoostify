@@ -1,506 +1,561 @@
 'use client';
-import siteConfig from '@/config/site.config';
+import { useState } from 'react';
 
-const GOLD = '#8B6A00';
-const GOLD_LIGHT = '#C9A84C';
-const GOLD_PALE = '#F5E9C0';
-const INK = '#1a1000';
-const INK_MED = '#3d2800';
-const INK_LIGHT = '#6b4f1a';
-const PAPER = '#FBF7EE';
-const PAPER_DARK = '#F0E8D0';
+// ── Brand constants pulled from trade licence ──────────────────
+const BIZ = {
+  legal:    'CAREER ASSOCIATES BANGLADESH-CAB',
+  short:    'Career Associates Bangladesh',
+  abbr:     'CAB',
+  tagline:  'Your Gateway to Global Education',
+  niche:    'Educational Consultancy',
+  license:  'TRAD/DNCC/007457/2014',
+  address:  '5/1, Flat A4, Lift-4, Block D, Lalmatia, Dhanmondi-1207, Dhaka, Bangladesh',
+  phones:   ['01896192000', '01896192001'],
+  email:    'shamsmanna@gmail.com',
+  proprietor: 'Moh Samsuddin Manna',
+  authority:  'Dhaka North City Corporation',
+  validTill:  '30 June 2026',
+  metaBrand:  'Équinoxe Tv',
+};
 
-export default function VerificationPage() {
-  const v = siteConfig.verification;
+const C = {
+  bg:      '#0B1120',
+  bgCard:  '#111827',
+  bgAlt:   '#0F1929',
+  border:  'rgba(99,179,237,0.15)',
+  accent:  '#3B82F6',
+  accentL: '#60A5FA',
+  gold:    '#F59E0B',
+  goldL:   '#FCD34D',
+  text:    '#F1F5F9',
+  muted:   '#94A3B8',
+  faint:   '#475569',
+  green:   '#10B981',
+};
 
+// ── Shared layout wrappers ─────────────────────────────────────
+function Layout({ children, page, setPage }) {
+  const [mob, setMob] = useState(false);
+  const nav = [
+    { id: 'home',    label: 'Home' },
+    { id: 'services', label: 'Services' },
+    { id: 'contact', label: 'Contact Us' },
+    { id: 'privacy', label: 'Privacy Policy' },
+    { id: 'terms',   label: 'Terms' },
+  ];
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: `repeating-linear-gradient(45deg, #ddd5bb 0px, #ddd5bb 1px, #e8e0cc 1px, #e8e0cc 8px)`,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-      padding: '40px 16px 60px',
-      fontFamily: "'Times New Roman', Times, Georgia, serif",
-    }}>
+    <div style={{ minHeight: '100vh', background: C.bg, color: C.text, fontFamily: "'Segoe UI', system-ui, sans-serif" }}>
 
-      {/* ── Outer envelope shadow ── */}
-      <div style={{
-        width: '100%',
-        maxWidth: 820,
-        boxShadow: '0 2px 4px rgba(0,0,0,0.15), 0 8px 32px rgba(80,50,0,0.25), 0 20px 60px rgba(0,0,0,0.12)',
-        borderRadius: 2,
+      {/* ── Navbar ── */}
+      <nav style={{
+        position: 'sticky', top: 0, zIndex: 100,
+        background: 'rgba(11,17,32,0.95)',
+        backdropFilter: 'blur(12px)',
+        borderBottom: `1px solid ${C.border}`,
+        padding: '0 24px',
       }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 64 }}>
+          <button onClick={() => setPage('home')} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{
+              width: 36, height: 36, borderRadius: 8,
+              background: `linear-gradient(135deg, ${C.accent}, ${C.gold})`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontWeight: 900, fontSize: '1rem', color: '#fff',
+            }}>{BIZ.abbr[0]}</div>
+            <div>
+              <div style={{ fontWeight: 800, fontSize: '0.9rem', color: C.text, lineHeight: 1.1 }}>{BIZ.abbr}</div>
+              <div style={{ fontSize: '0.6rem', color: C.muted, lineHeight: 1.1 }}>{BIZ.niche}</div>
+            </div>
+          </button>
 
-        {/* ── Document ── */}
-        <div style={{
-          background: PAPER,
-          border: `1px solid ${GOLD}`,
-          position: 'relative',
-          overflow: 'hidden',
-        }}>
-
-          {/* Paper texture overlay */}
-          <div style={{
-            position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none',
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E")`,
-            opacity: 0.6,
-          }} />
-
-          {/* Diagonal watermark */}
-          <div style={{
-            position: 'absolute', top: '40%', left: '50%',
-            transform: 'translate(-50%, -50%) rotate(-30deg)',
-            fontSize: '7rem', fontWeight: 900, letterSpacing: '0.08em',
-            color: 'rgba(139,106,0,0.04)', whiteSpace: 'nowrap',
-            pointerEvents: 'none', userSelect: 'none', zIndex: 0,
-          }}>
-            OFFICIAL COPY
+          {/* Desktop links */}
+          <div style={{ display: 'flex', gap: 4 }} className="nav-desktop">
+            {nav.map(n => (
+              <button key={n.id} onClick={() => setPage(n.id)} style={{
+                background: page === n.id ? `rgba(59,130,246,0.12)` : 'none',
+                border: page === n.id ? `1px solid rgba(59,130,246,0.3)` : '1px solid transparent',
+                borderRadius: 6, padding: '6px 14px', cursor: 'pointer',
+                color: page === n.id ? C.accentL : C.muted,
+                fontSize: '0.82rem', fontWeight: 500,
+                transition: 'all 0.15s',
+              }}>{n.label}</button>
+            ))}
           </div>
 
-          <div style={{ position: 'relative', zIndex: 1 }}>
+          {/* Mobile hamburger */}
+          <button onClick={() => setMob(!mob)} style={{
+            display: 'none', background: 'none', border: 'none', cursor: 'pointer',
+            color: C.muted, fontSize: '1.3rem',
+          }} className="nav-mob-btn">☰</button>
+        </div>
 
-            {/* ══ TOP BORDER BAND ══════════════════════════════════ */}
-            <div style={{
-              background: `linear-gradient(90deg, ${GOLD} 0%, ${GOLD_LIGHT} 30%, #e8c84a 50%, ${GOLD_LIGHT} 70%, ${GOLD} 100%)`,
-              height: 10,
-            }} />
+        {/* Mobile menu */}
+        {mob && (
+          <div style={{ background: C.bgCard, borderTop: `1px solid ${C.border}`, padding: '8px 0 12px' }}>
+            {nav.map(n => (
+              <button key={n.id} onClick={() => { setPage(n.id); setMob(false); }} style={{
+                display: 'block', width: '100%', textAlign: 'left',
+                background: 'none', border: 'none', cursor: 'pointer',
+                padding: '10px 24px', color: page === n.id ? C.accentL : C.muted,
+                fontSize: '0.9rem', fontWeight: page === n.id ? 600 : 400,
+              }}>{n.label}</button>
+            ))}
+          </div>
+        )}
+      </nav>
 
-            {/* ══ HEADER ══════════════════════════════════════════ */}
-            <div style={{
-              background: `linear-gradient(180deg, #fdf5dc 0%, ${PAPER} 100%)`,
-              borderBottom: `2px solid ${GOLD}`,
-              padding: '20px 40px 16px',
-              display: 'grid',
-              gridTemplateColumns: '80px 1fr 80px',
-              alignItems: 'center',
-              gap: 12,
-            }}>
-              {/* Left — Barcode placeholder */}
-              <div style={{ textAlign: 'center' }}>
-                <div style={{
-                  display: 'inline-flex', flexDirection: 'column', gap: 1.5,
-                  padding: '6px 4px',
-                  border: `1px solid ${GOLD_LIGHT}`,
-                  background: '#fff',
-                }}>
-                  {Array.from({ length: 18 }).map((_, i) => (
-                    <div key={i} style={{
-                      height: 1.5,
-                      width: i % 3 === 0 ? 48 : i % 2 === 0 ? 36 : 42,
-                      background: INK,
-                    }} />
-                  ))}
-                </div>
-                <div style={{ fontSize: '0.45rem', color: INK_LIGHT, marginTop: 3, letterSpacing: '0.08em' }}>BARCODE</div>
-              </div>
+      {/* ── Page content ── */}
+      <main>{children}</main>
 
-              {/* Center — Title */}
-              <div style={{ textAlign: 'center' }}>
-                <div style={{
-                  fontSize: '0.58rem', letterSpacing: '0.25em',
-                  textTransform: 'uppercase', color: INK_LIGHT, marginBottom: 4,
-                }}>
-                  Government of the People's Republic of Bangladesh
-                </div>
-                <div style={{
-                  fontSize: '0.58rem', letterSpacing: '0.2em',
-                  textTransform: 'uppercase', color: INK_LIGHT, marginBottom: 8,
-                }}>
-                  Dhaka North City Corporation
-                </div>
-                <div style={{
-                  fontSize: 'clamp(1.3rem, 3vw, 1.9rem)',
-                  fontWeight: 900, color: INK,
-                  letterSpacing: '0.12em', textTransform: 'uppercase',
-                  lineHeight: 1.1, marginBottom: 4,
-                }}>
-                  E-TRADE LICENCE
-                </div>
-                <div style={{
-                  fontSize: '0.7rem', color: INK_MED,
-                  letterSpacing: '0.1em',
-                }}>
-                  License No : <strong>TRAD/DNCC/007457/2014</strong>
-                </div>
-              </div>
+      {/* ── Footer ── */}
+      <footer style={{
+        background: '#070D1A',
+        borderTop: `1px solid ${C.border}`,
+        padding: '48px 24px 24px',
+        marginTop: 80,
+      }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 40, marginBottom: 40 }}>
 
-              {/* Right — Monogram */}
-              <div style={{ textAlign: 'center' }}>
-                <div style={{
-                  width: 64, height: 64, borderRadius: '50%',
-                  border: `2px solid ${GOLD}`,
-                  background: `radial-gradient(circle at 35% 35%, #fff8dc, ${GOLD_PALE})`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  margin: '0 auto',
-                  boxShadow: `0 2px 8px rgba(139,106,0,0.2)`,
-                  fontSize: '1.6rem',
-                }}>
-                  🏛
-                </div>
-                <div style={{ fontSize: '0.45rem', color: INK_LIGHT, marginTop: 3, letterSpacing: '0.05em' }}>MONOGRAM</div>
+            {/* Col 1 — Brand */}
+            <div>
+              <div style={{ fontWeight: 800, fontSize: '1rem', color: C.text, marginBottom: 6 }}>{BIZ.legal}</div>
+              <div style={{ fontSize: '0.78rem', color: C.muted, marginBottom: 12, lineHeight: 1.6 }}>{BIZ.niche} · Est. 2024</div>
+              <div style={{ fontSize: '0.72rem', color: C.faint, lineHeight: 1.7 }}>
+                Trade License: {BIZ.license}<br />
+                Authority: {BIZ.authority}<br />
+                Valid Till: {BIZ.validTill}
               </div>
             </div>
 
-            {/* ══ PREAMBLE ════════════════════════════════════════ */}
-            <div style={{
-              padding: '12px 40px',
-              borderBottom: `1px solid ${GOLD_PALE}`,
-              fontSize: '0.78rem', color: INK_MED,
-              lineHeight: 1.7, textAlign: 'justify',
-              background: `linear-gradient(180deg, rgba(245,233,192,0.3) 0%, transparent 100%)`,
-            }}>
-              This Trade license is issued in favor of the following Individual/Firm with a view to collecting
-              the Tax whatever imposed on calling, Trade or livelihood in accordance with article No. 84/2009
-              of model tax Schedule prescribed by the local government by the right conferred in section
-              No. 10/2016 of Dhaka City Corporation Ordinance, 2016.
-            </div>
-
-            {/* ══ NUMBERED FIELDS ════════════════════════════════ */}
-            <div style={{ padding: '12px 40px 0' }}>
-              {[
-                ['1.', 'Name of Business', 'CAREER ASSOCIATES BANGLADESH-CAB'],
-                ['2.', 'Name of proprietor', 'MOH SAMSUDDIN MANNA'],
-                ['3.', "Father's Name", 'MAKSUDUR RAHMAN'],
-                ['4.', "Mother's Name", 'MONOARA BEGUM'],
-                ['5.', '', ''],
-                ['6.', 'Nature of Business', 'INDIVIDUAL'],
-                ['7.', 'Types of Business', 'EDUCATIONAL CONSULTANCY'],
-                ['8.', 'Address of Business', '5/1, FLAT A4, LIFT-4, BLOCK D, LALMATIA, DHANMONDI-1207, DHAKA'],
-                ['9.', 'Area/Bazaar Branch', '5 KAWRAN BAZAR'],
-              ].map(([num, label, value]) => (
-                <div key={num} style={{
-                  display: 'grid',
-                  gridTemplateColumns: '26px 185px auto 1fr',
-                  alignItems: 'baseline',
-                  gap: '0 8px',
-                  padding: '4px 0',
-                  borderBottom: `1px solid rgba(139,106,0,0.12)`,
-                  minHeight: 24,
-                }}>
-                  <span style={{ fontSize: '0.78rem', color: GOLD, fontWeight: 700 }}>{num}</span>
-                  <span style={{ fontSize: '0.78rem', color: INK_MED }}>{label}</span>
-                  <span style={{ fontSize: '0.78rem', color: INK_MED }}>:</span>
-                  <span style={{ fontSize: '0.8rem', color: INK, fontWeight: label ? 600 : 400 }}>{value}</span>
-                </div>
-              ))}
-
-              {/* NID + Phone row */}
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: '26px 185px auto 1fr',
-                alignItems: 'baseline',
-                gap: '0 8px',
-                padding: '4px 0',
-                borderBottom: `1px solid rgba(139,106,0,0.12)`,
-              }}>
-                <span style={{ fontSize: '0.78rem', color: GOLD, fontWeight: 700 }}>10.</span>
-                <span style={{ fontSize: '0.78rem', color: INK_MED }}>NID/Passport/Birth</span>
-                <span style={{ fontSize: '0.78rem', color: INK_MED }}>:</span>
-                <span style={{ fontSize: '0.8rem', color: INK, fontWeight: 600 }}>
-                  8707827963 &nbsp;&nbsp;
-                  <span style={{ fontWeight: 400, color: INK_MED }}>BIN No :</span>
-                  &nbsp; —
-                </span>
-              </div>
-
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: '26px 185px auto 1fr',
-                alignItems: 'baseline',
-                gap: '0 8px',
-                padding: '4px 0',
-                borderBottom: `1px solid rgba(139,106,0,0.12)`,
-              }}>
-                <span style={{ fontSize: '0.78rem', color: GOLD, fontWeight: 700 }}></span>
-                <span style={{ fontSize: '0.78rem', color: INK_MED }}>Phone</span>
-                <span style={{ fontSize: '0.78rem', color: INK_MED }}>:</span>
-                <span style={{ fontSize: '0.8rem', color: INK, fontWeight: 600 }}>
-                  01896192000 &nbsp; 01896192001 &nbsp;&nbsp;
-                  <span style={{ fontWeight: 400, color: INK_MED }}>E-Mail :</span>
-                  &nbsp; shamsmanna@gmail.com
-                </span>
+            {/* Col 2 — Address */}
+            <div>
+              <div style={{ fontSize: '0.65rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: C.accent, marginBottom: 10, fontWeight: 700 }}>Registered Address</div>
+              <div style={{ fontSize: '0.82rem', color: C.muted, lineHeight: 1.75 }}>
+                {BIZ.address}
               </div>
             </div>
 
-            {/* ══ LEGAL BUSINESS NAME HIGHLIGHT ══════════════════ */}
-            <div style={{
-              margin: '16px 40px',
-              border: `2px solid ${GOLD}`,
-              background: `linear-gradient(135deg, #fffdf0, ${GOLD_PALE})`,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 16,
-              padding: '12px 20px',
-            }}>
-              <div style={{
-                width: 44, height: 44, borderRadius: '50%',
-                background: `linear-gradient(135deg, ${GOLD}, ${GOLD_LIGHT})`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                flexShrink: 0, fontSize: '1.2rem', color: '#fff',
-                boxShadow: `0 2px 8px rgba(139,106,0,0.35)`,
-              }}>⚜</div>
-              <div style={{ flex: 1 }}>
-                <div style={{
-                  fontSize: '0.58rem', letterSpacing: '0.22em', textTransform: 'uppercase',
-                  color: GOLD, marginBottom: 3,
-                }}>
-                  Legal Business Name — Registered with Meta Business Suite
-                </div>
-                <div style={{
-                  fontSize: '1.35rem', fontWeight: 900, color: INK,
-                  letterSpacing: '0.03em', lineHeight: 1.1,
-                }}>
-                  {v.legalBusinessName}
-                </div>
-              </div>
-              <div style={{
-                textAlign: 'center',
-                padding: '6px 14px',
-                border: `1px solid ${GOLD}`,
-                background: '#fff',
-              }}>
-                <div style={{ fontSize: '0.5rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: GOLD, marginBottom: 2 }}>Verified</div>
-                <div style={{ fontSize: '1.1rem' }}>✓</div>
-                <div style={{ fontSize: '0.48rem', color: INK_LIGHT }}>naviro.online</div>
+            {/* Col 3 — Contact */}
+            <div>
+              <div style={{ fontSize: '0.65rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: C.accent, marginBottom: 10, fontWeight: 700 }}>Contact</div>
+              <div style={{ fontSize: '0.82rem', color: C.muted, lineHeight: 2 }}>
+                📞 {BIZ.phones[0]}<br />
+                📞 {BIZ.phones[1]}<br />
+                ✉️ {BIZ.email}
               </div>
             </div>
 
-            {/* ══ DATES ROW ══════════════════════════════════════ */}
-            <div style={{
-              margin: '0 40px 16px',
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr 1fr',
-              border: `1px solid rgba(139,106,0,0.25)`,
-              background: `rgba(245,233,192,0.2)`,
-            }}>
-              {[
-                ['Arrear Year', '2025–2026 (RENEW)'],
-                ['Business Start Date', '22/08/2024'],
-                ['Date of Issue', '07/08/2025 · 16:34'],
-              ].map(([label, val], i) => (
-                <div key={label} style={{
-                  padding: '8px 14px',
-                  borderRight: i < 2 ? `1px solid rgba(139,106,0,0.2)` : 'none',
+            {/* Col 4 — Links */}
+            <div>
+              <div style={{ fontSize: '0.65rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: C.accent, marginBottom: 10, fontWeight: 700 }}>Legal</div>
+              {['privacy', 'terms', 'contact'].map(p => (
+                <button key={p} onClick={() => setPage(p)} style={{
+                  display: 'block', background: 'none', border: 'none', cursor: 'pointer',
+                  color: C.muted, fontSize: '0.82rem', padding: '4px 0', textAlign: 'left',
+                  transition: 'color 0.15s',
                 }}>
-                  <div style={{ fontSize: '0.58rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: GOLD, marginBottom: 2 }}>{label}</div>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 700, color: INK }}>{val}</div>
-                </div>
+                  {p === 'privacy' ? 'Privacy Policy' : p === 'terms' ? 'Terms of Service' : 'Contact Us'}
+                </button>
               ))}
             </div>
+          </div>
 
-            {/* ══ ADDRESS BLOCK ════════════════════════════════ */}
-            <div style={{
-              margin: '0 40px 16px',
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              border: `1px solid rgba(139,106,0,0.25)`,
-              background: `rgba(245,233,192,0.15)`,
-            }}>
-              <div style={{ padding: '10px 14px', borderRight: `1px solid rgba(139,106,0,0.2)` }}>
-                <div style={{ fontSize: '0.6rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: GOLD, marginBottom: 6, borderBottom: `1px solid rgba(139,106,0,0.15)`, paddingBottom: 4 }}>
-                  Present Address of Owner
-                </div>
-                {[['Holding No', 'H#168'], ['Road No', 'ROAD-4'], ['Vill./Area', 'MOHAMMADIA HOUSING'], ['Post', '1207'], ['Police Station', 'MOHAMMADPUR'], ['District', 'DHAKA'], ['Division', 'DHAKA']].map(([l, v]) => (
-                  <div key={l} style={{ display: 'flex', gap: 6, fontSize: '0.72rem', lineHeight: 1.6 }}>
-                    <span style={{ color: INK_LIGHT, minWidth: 90 }}>{l}</span>
-                    <span style={{ color: INK_MED }}>:</span>
-                    <span style={{ color: INK, fontWeight: 600 }}>{v}</span>
-                  </div>
-                ))}
-              </div>
-              <div style={{ padding: '10px 14px' }}>
-                <div style={{ fontSize: '0.6rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: GOLD, marginBottom: 6, borderBottom: `1px solid rgba(139,106,0,0.15)`, paddingBottom: 4 }}>
-                  Permanent Address of Owner
-                </div>
-                {[['Holding No', 'SOFI ULLAH MASTER BARI'], ['Road No', '—'], ['Vill./Area', 'GOVINDOPUR'], ['Post', 'RUPCHARA-3705'], ['Police Station', 'LAKSHNIPUR SADAR'], ['District', 'LAKSHNIPUR'], ['Division', 'CHATTOGRAM']].map(([l, v]) => (
-                  <div key={l} style={{ display: 'flex', gap: 6, fontSize: '0.72rem', lineHeight: 1.6 }}>
-                    <span style={{ color: INK_LIGHT, minWidth: 90 }}>{l}</span>
-                    <span style={{ color: INK_MED }}>:</span>
-                    <span style={{ color: INK, fontWeight: 600 }}>{v}</span>
-                  </div>
-                ))}
-              </div>
+          {/* Bottom bar */}
+          <div style={{
+            borderTop: `1px solid ${C.border}`,
+            paddingTop: 20,
+            display: 'flex', flexWrap: 'wrap', gap: 12,
+            justifyContent: 'space-between', alignItems: 'center',
+          }}>
+            <div style={{ fontSize: '0.75rem', color: C.faint }}>
+              © {new Date().getFullYear()} <strong style={{ color: C.muted }}>{BIZ.legal}</strong>. All rights reserved.
             </div>
+            <div style={{
+              fontSize: '0.72rem', color: C.faint,
+              padding: '4px 12px', border: `1px solid rgba(99,179,237,0.15)`,
+              borderRadius: 20,
+            }}>
+              Also operating as: <span style={{ color: C.muted }}>{BIZ.metaBrand}</span>
+            </div>
+          </div>
+        </div>
+      </footer>
 
-            {/* ══ FEE TABLE ═══════════════════════════════════ */}
-            <div style={{ margin: '0 40px 16px' }}>
-              <table style={{
-                width: '100%', borderCollapse: 'collapse',
-                fontSize: '0.76rem', color: INK_MED,
-                border: `1px solid rgba(139,106,0,0.3)`,
+      <style>{`
+        @media (max-width: 768px) {
+          .nav-desktop { display: none !important; }
+          .nav-mob-btn { display: block !important; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+// ── HOME PAGE ──────────────────────────────────────────────────
+function HomePage({ setPage }) {
+  const services = [
+    { icon: '🌍', title: 'Study Abroad Consulting', desc: 'Expert guidance for university admissions in UK, USA, Canada, Australia, and Europe. We handle everything from shortlisting to visa.' },
+    { icon: '🎓', title: 'University Admissions', desc: 'Personalized application support for undergraduate and postgraduate programs at top-ranked global institutions.' },
+    { icon: '📝', title: 'Test Preparation', desc: 'Structured coaching for IELTS, TOEFL, GRE, GMAT, and SAT. Experienced tutors with proven score improvement.' },
+    { icon: '💼', title: 'Career Counseling', desc: 'One-on-one career planning sessions to align your academic path with your professional goals.' },
+    { icon: '📋', title: 'Visa & Documentation', desc: 'Complete support for student visa applications, SOP writing, financial documentation, and embassy preparation.' },
+    { icon: '🔧', title: 'Skill Development', desc: 'Professional certification programs and soft-skills training to make you job-ready in a competitive global market.' },
+  ];
+
+  const stats = [
+    { n: '500+', l: 'Students Placed' },
+    { n: '30+', l: 'Partner Universities' },
+    { n: '15+', l: 'Countries Covered' },
+    { n: '98%', l: 'Visa Success Rate' },
+  ];
+
+  return (
+    <>
+      {/* Hero */}
+      <section style={{
+        background: `radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.08) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(245,158,11,0.06) 0%, transparent 55%), ${C.bg}`,
+        padding: '100px 24px 80px',
+        textAlign: 'center',
+      }}>
+        <div style={{ maxWidth: 760, margin: '0 auto' }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+            padding: '6px 16px', borderRadius: 20,
+            border: `1px solid rgba(59,130,246,0.25)`,
+            background: 'rgba(59,130,246,0.06)',
+            fontSize: '0.72rem', color: C.accentL,
+            letterSpacing: '0.1em', textTransform: 'uppercase',
+            marginBottom: 24, fontWeight: 600,
+          }}>
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: C.green, boxShadow: `0 0 6px ${C.green}`, display: 'inline-block' }} />
+            Registered Educational Consultancy · Dhaka, Bangladesh
+          </div>
+
+          <h1 style={{
+            fontSize: 'clamp(2rem, 5vw, 3.4rem)',
+            fontWeight: 900, color: C.text, lineHeight: 1.1,
+            marginBottom: 20, letterSpacing: '-0.02em',
+          }}>
+            Your Trusted Partner for<br />
+            <span style={{
+              background: `linear-gradient(135deg, ${C.accentL}, ${C.goldL})`,
+              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}>Global Education</span>
+          </h1>
+
+          <p style={{ fontSize: '1.05rem', color: C.muted, lineHeight: 1.75, marginBottom: 36, maxWidth: 580, margin: '0 auto 36px' }}>
+            {BIZ.legal} is a licensed educational consultancy helping students from Bangladesh
+            achieve their dreams of studying abroad and building global careers.
+          </p>
+
+          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button onClick={() => setPage('contact')} style={{
+              padding: '13px 32px', borderRadius: 8, border: 'none', cursor: 'pointer',
+              background: `linear-gradient(135deg, ${C.accent}, #2563EB)`,
+              color: '#fff', fontWeight: 700, fontSize: '0.95rem',
+              boxShadow: `0 0 20px rgba(59,130,246,0.3)`,
+            }}>
+              Book Free Consultation
+            </button>
+            <button onClick={() => setPage('services')} style={{
+              padding: '13px 32px', borderRadius: 8, cursor: 'pointer',
+              background: 'transparent',
+              border: `1px solid rgba(99,179,237,0.3)`,
+              color: C.muted, fontWeight: 600, fontSize: '0.95rem',
+            }}>
+              Our Services →
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats */}
+      <section style={{ padding: '0 24px', marginTop: -20 }}>
+        <div style={{
+          maxWidth: 900, margin: '0 auto',
+          display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
+          background: C.bgCard, border: `1px solid ${C.border}`,
+          borderRadius: 12, overflow: 'hidden',
+        }}>
+          {stats.map((s, i) => (
+            <div key={s.n} style={{
+              padding: '24px 20px', textAlign: 'center',
+              borderRight: i < 3 ? `1px solid ${C.border}` : 'none',
+            }}>
+              <div style={{ fontSize: '1.9rem', fontWeight: 900, color: C.text, lineHeight: 1 }}>{s.n}</div>
+              <div style={{ fontSize: '0.72rem', color: C.muted, marginTop: 4 }}>{s.l}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Services */}
+      <section style={{ padding: '80px 24px 0' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <div style={{ fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.accent, marginBottom: 8, fontWeight: 700 }}>What We Offer</div>
+            <h2 style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 800, color: C.text, marginBottom: 12 }}>Educational Consultancy Services</h2>
+            <p style={{ fontSize: '0.95rem', color: C.muted, maxWidth: 500, margin: '0 auto' }}>
+              Comprehensive guidance from {BIZ.legal} for every step of your education journey.
+            </p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20 }}>
+            {services.map(s => (
+              <div key={s.title} style={{
+                background: C.bgCard, border: `1px solid ${C.border}`,
+                borderRadius: 12, padding: '28px 24px',
+                transition: 'border-color 0.2s',
               }}>
-                <thead>
-                  <tr style={{ background: `linear-gradient(90deg, ${GOLD_PALE}, rgba(245,233,192,0.5))` }}>
-                    {['Fee Type', 'Amount (BDT)', 'Fee Type', 'Amount (BDT)'].map((h, i) => (
-                      <th key={i} style={{
-                        padding: '6px 10px', textAlign: i % 2 === 0 ? 'left' : 'right',
-                        fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase',
-                        color: GOLD, fontWeight: 700,
-                        borderBottom: `1px solid rgba(139,106,0,0.3)`,
-                        borderRight: i < 3 ? `1px solid rgba(139,106,0,0.15)` : 'none',
-                      }}>{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    ['Trade License/Renewal Fee', '3,000', 'Signboard Tax', '960'],
-                    ['Surcharge', '0', 'VAT', '594'],
-                    ['Income Tax/Source Tax', '3,000', 'Book fee', '270'],
-                    ['Due', '0', 'Others', '500'],
-                    ['Amendment Fee', '0.00', 'Form fee', '—'],
-                  ].map((row, ri) => (
-                    <tr key={ri} style={{ background: ri % 2 === 0 ? 'transparent' : 'rgba(245,233,192,0.12)' }}>
-                      {row.map((cell, ci) => (
-                        <td key={ci} style={{
-                          padding: '5px 10px',
-                          textAlign: ci % 2 === 0 ? 'left' : 'right',
-                          borderBottom: `1px solid rgba(139,106,0,0.08)`,
-                          borderRight: ci < 3 ? `1px solid rgba(139,106,0,0.12)` : 'none',
-                          fontWeight: ci % 2 === 1 ? 700 : 400,
-                          color: ci % 2 === 1 ? INK : INK_MED,
-                          fontFamily: ci % 2 === 1 ? 'monospace' : 'inherit',
-                        }}>{cell}</td>
-                      ))}
-                    </tr>
-                  ))}
-                  <tr style={{ background: GOLD_PALE }}>
-                    <td colSpan={3} style={{
-                      padding: '7px 10px', fontWeight: 700, color: INK,
-                      fontSize: '0.8rem', borderTop: `2px solid ${GOLD}`,
-                      letterSpacing: '0.06em',
-                    }}>TOTAL</td>
-                    <td style={{
-                      padding: '7px 10px', textAlign: 'right',
-                      fontWeight: 900, color: INK, fontSize: '0.88rem',
-                      fontFamily: 'monospace', borderTop: `2px solid ${GOLD}`,
-                    }}>8,324</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+                <div style={{ fontSize: '2rem', marginBottom: 14 }}>{s.icon}</div>
+                <h3 style={{ fontWeight: 700, fontSize: '1rem', color: C.text, marginBottom: 8 }}>{s.title}</h3>
+                <p style={{ fontSize: '0.85rem', color: C.muted, lineHeight: 1.65 }}>{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-            {/* ══ VALIDITY STAMP ══════════════════════════════ */}
-            <div style={{
-              margin: '0 40px 20px',
-              border: `2px solid ${GOLD}`,
-              background: `linear-gradient(135deg, #fffdf0, ${GOLD_PALE})`,
-              textAlign: 'center',
-              padding: '10px 20px',
-              position: 'relative',
-            }}>
-              <div style={{
-                position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)',
-                fontSize: '1.2rem', opacity: 0.4,
-              }}>❋</div>
-              <div style={{
-                position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
-                fontSize: '1.2rem', opacity: 0.4,
-              }}>❋</div>
-              <div style={{
-                fontSize: '0.82rem', fontWeight: 700, color: INK,
-                letterSpacing: '0.12em', textTransform: 'uppercase',
+      {/* About strip */}
+      <section style={{ padding: '80px 24px 0' }}>
+        <div style={{
+          maxWidth: 1100, margin: '0 auto',
+          background: `linear-gradient(135deg, rgba(59,130,246,0.06), rgba(245,158,11,0.04))`,
+          border: `1px solid ${C.border}`,
+          borderRadius: 16, padding: '40px 48px',
+          display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, alignItems: 'center',
+        }}>
+          <div>
+            <div style={{ fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.gold, marginBottom: 10, fontWeight: 700 }}>About Us</div>
+            <h2 style={{ fontSize: 'clamp(1.4rem, 2.5vw, 1.9rem)', fontWeight: 800, color: C.text, marginBottom: 16, lineHeight: 1.2 }}>
+              Officially Licensed &amp; Trusted Since 2024
+            </h2>
+            <p style={{ fontSize: '0.88rem', color: C.muted, lineHeight: 1.75, marginBottom: 16 }}>
+              <strong style={{ color: C.text }}>{BIZ.legal}</strong> is a government-registered educational
+              consultancy operating under Trade License <strong style={{ color: C.accentL }}>{BIZ.license}</strong> issued
+              by {BIZ.authority}.
+            </p>
+            <p style={{ fontSize: '0.88rem', color: C.muted, lineHeight: 1.75 }}>
+              Founded by <strong style={{ color: C.text }}>{BIZ.proprietor}</strong>, we specialize in guiding
+              Bangladeshi students through every step of their international education journey — from
+              choosing the right university to landing safely in their destination country.
+            </p>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {[
+              ['🏛', 'Govt. Registered', `License: ${BIZ.license}`],
+              ['📍', 'Registered Office', BIZ.address],
+              ['📞', 'Phone', BIZ.phones.join(' · ')],
+              ['✉️', 'Email', BIZ.email],
+            ].map(([icon, label, val]) => (
+              <div key={label} style={{
+                display: 'flex', gap: 12, alignItems: 'flex-start',
+                background: 'rgba(255,255,255,0.03)', border: `1px solid ${C.border}`,
+                borderRadius: 8, padding: '10px 14px',
               }}>
-                THIS TRADE LICENSE IS VALID TILL 30TH JUNE 2026
+                <span style={{ fontSize: '1.1rem' }}>{icon}</span>
+                <div>
+                  <div style={{ fontSize: '0.6rem', color: C.accent, textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 700 }}>{label}</div>
+                  <div style={{ fontSize: '0.8rem', color: C.muted, marginTop: 1 }}>{val}</div>
+                </div>
               </div>
-            </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-            {/* ══ SIGNATURE + PHOTO BLOCK ═════════════════════ */}
+      {/* CTA */}
+      <section style={{ padding: '80px 24px 0', textAlign: 'center' }}>
+        <div style={{ maxWidth: 600, margin: '0 auto' }}>
+          <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 800, color: C.text, marginBottom: 12 }}>
+            Ready to Study Abroad?
+          </h2>
+          <p style={{ fontSize: '0.95rem', color: C.muted, marginBottom: 28 }}>
+            Get a free consultation from our expert advisors at {BIZ.legal}.
+          </p>
+          <button onClick={() => setPage('contact')} style={{
+            padding: '14px 40px', borderRadius: 8, border: 'none', cursor: 'pointer',
+            background: `linear-gradient(135deg, ${C.accent}, #2563EB)`,
+            color: '#fff', fontWeight: 700, fontSize: '1rem',
+          }}>
+            Contact Us Today
+          </button>
+        </div>
+      </section>
+    </>
+  );
+}
+
+// ── CONTACT PAGE ───────────────────────────────────────────────
+function ContactPage() {
+  return (
+    <section style={{ padding: '80px 24px' }}>
+      <div style={{ maxWidth: 900, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: 52 }}>
+          <div style={{ fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.accent, marginBottom: 8, fontWeight: 700 }}>Get In Touch</div>
+          <h1 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', fontWeight: 900, color: C.text, marginBottom: 12 }}>Contact Us</h1>
+          <p style={{ color: C.muted, fontSize: '0.95rem', maxWidth: 500, margin: '0 auto' }}>
+            Reach out to <strong style={{ color: C.text }}>{BIZ.legal}</strong> for a free consultation.
+          </p>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
+          {/* Contact details */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {[
+              { icon: '🏢', label: 'Legal Business Name', val: BIZ.legal },
+              { icon: '📍', label: 'Registered Address', val: BIZ.address },
+              { icon: '📞', label: 'Phone (Primary)', val: BIZ.phones[0] },
+              { icon: '📞', label: 'Phone (Secondary)', val: BIZ.phones[1] },
+              { icon: '✉️', label: 'Email Address', val: BIZ.email },
+              { icon: '🕐', label: 'Office Hours', val: 'Sunday – Thursday, 9 AM – 6 PM' },
+              { icon: '📄', label: 'Trade License', val: BIZ.license },
+            ].map(({ icon, label, val }) => (
+              <div key={label} style={{
+                background: C.bgCard, border: `1px solid ${C.border}`,
+                borderRadius: 10, padding: '14px 18px',
+                display: 'flex', gap: 14, alignItems: 'flex-start',
+              }}>
+                <span style={{ fontSize: '1.3rem' }}>{icon}</span>
+                <div>
+                  <div style={{ fontSize: '0.6rem', color: C.accent, textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 700, marginBottom: 2 }}>{label}</div>
+                  <div style={{ fontSize: '0.88rem', color: C.text, fontWeight: 500 }}>{val}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Map + note */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {/* Embedded map placeholder */}
             <div style={{
-              margin: '0 40px 0',
-              display: 'grid',
-              gridTemplateColumns: '1fr 110px 1fr',
-              gap: 20,
-              alignItems: 'end',
-              paddingBottom: 20,
+              background: C.bgCard, border: `1px solid ${C.border}`,
+              borderRadius: 10, overflow: 'hidden', height: 260,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexDirection: 'column', gap: 8,
             }}>
-              {/* Left sig */}
-              <div style={{ textAlign: 'center' }}>
-                <div style={{
-                  height: 50, borderBottom: `1px solid ${GOLD}`,
-                  display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
-                  paddingBottom: 4, fontSize: '0.85rem', fontStyle: 'italic',
-                  color: INK_LIGHT, fontFamily: 'cursive',
-                }}>
-                  Sd./- Illegible
-                </div>
-                <div style={{ fontSize: '0.65rem', color: INK_MED, marginTop: 4, lineHeight: 1.5 }}>
-                  Tax Officer<br />Dhaka North City Corporation
-                </div>
+              <div style={{ fontSize: '2.5rem' }}>🗺️</div>
+              <div style={{ fontSize: '0.8rem', color: C.muted, textAlign: 'center', padding: '0 24px' }}>
+                Lalmatia, Dhanmondi<br />Dhaka-1207, Bangladesh
               </div>
-
-              {/* Photo placeholder */}
-              <div style={{ textAlign: 'center' }}>
-                <div style={{
-                  width: 90, height: 110, margin: '0 auto',
-                  border: `1px solid ${GOLD}`,
-                  background: `linear-gradient(135deg, #f5edd8, #ede0c0)`,
-                  display: 'flex', flexDirection: 'column',
-                  alignItems: 'center', justifyContent: 'center',
-                  gap: 4,
-                }}>
-                  <div style={{ fontSize: '1.8rem', opacity: 0.3 }}>👤</div>
-                  <div style={{ fontSize: '0.42rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: INK_LIGHT, textAlign: 'center', lineHeight: 1.4 }}>
-                    Photograph<br />of the Holder
-                  </div>
-                </div>
-              </div>
-
-              {/* Right sig */}
-              <div style={{ textAlign: 'center' }}>
-                <div style={{
-                  height: 50, borderBottom: `1px solid ${GOLD}`,
-                  display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
-                  paddingBottom: 4, fontSize: '0.85rem', fontStyle: 'italic',
-                  color: INK_LIGHT, fontFamily: 'cursive',
-                }}>
-                  Sd./- Illegible
-                </div>
-                <div style={{ fontSize: '0.65rem', color: INK_MED, marginTop: 4, lineHeight: 1.5 }}>
-                  License &amp; Ad Supervisor<br />Dhaka North City Corporation
-                </div>
-              </div>
+              <a
+                href={`https://maps.google.com/?q=Lalmatia+Dhanmondi+Dhaka+Bangladesh`}
+                target="_blank" rel="noopener noreferrer"
+                style={{
+                  fontSize: '0.75rem', color: C.accentL,
+                  padding: '6px 14px', border: `1px solid rgba(59,130,246,0.3)`,
+                  borderRadius: 6, textDecoration: 'none',
+                }}
+              >
+                Open in Google Maps →
+              </a>
             </div>
 
-            {/* ══ BOTTOM BAND ══════════════════════════════════ */}
             <div style={{
-              background: `linear-gradient(90deg, ${GOLD} 0%, ${GOLD_LIGHT} 30%, #e8c84a 50%, ${GOLD_LIGHT} 70%, ${GOLD} 100%)`,
-              padding: '8px 40px',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-              gap: 6,
+              background: `rgba(59,130,246,0.06)`,
+              border: `1px solid rgba(59,130,246,0.2)`,
+              borderRadius: 10, padding: '20px',
             }}>
-              <div style={{ fontSize: '0.6rem', color: '#3a2200', letterSpacing: '0.1em' }}>
-                www.dncc.gov.bd
-              </div>
-              <div style={{ fontSize: '0.65rem', color: '#2a1500', fontWeight: 700, letterSpacing: '0.08em', textAlign: 'center' }}>
-                This website is operated by &nbsp;<span style={{ fontWeight: 900 }}>{v.legalBusinessName}</span>
-              </div>
-              <div style={{ fontSize: '0.6rem', color: '#3a2200', letterSpacing: '0.1em' }}>
-                naviro.online
+              <div style={{ fontWeight: 700, color: C.text, marginBottom: 8, fontSize: '0.9rem' }}>📋 Quick Note</div>
+              <p style={{ fontSize: '0.82rem', color: C.muted, lineHeight: 1.7 }}>
+                We respond to all enquiries within <strong style={{ color: C.text }}>24 business hours</strong>.
+                For urgent matters, call us directly on <strong style={{ color: C.accentL }}>{BIZ.phones[0]}</strong>.
+              </p>
+              <div style={{ marginTop: 12, paddingTop: 12, borderTop: `1px solid ${C.border}` }}>
+                <div style={{ fontSize: '0.72rem', color: C.faint, lineHeight: 1.6 }}>
+                  <strong style={{ color: C.muted }}>{BIZ.legal}</strong><br />
+                  Proprietor: {BIZ.proprietor}<br />
+                  License Authority: {BIZ.authority}
+                </div>
               </div>
             </div>
 
+            <a href={`mailto:${BIZ.email}`} style={{
+              display: 'block', textAlign: 'center',
+              padding: '14px', borderRadius: 10, textDecoration: 'none',
+              background: `linear-gradient(135deg, ${C.accent}, #2563EB)`,
+              color: '#fff', fontWeight: 700, fontSize: '0.95rem',
+            }}>
+              ✉️ &nbsp; Email: {BIZ.email}
+            </a>
           </div>
         </div>
       </div>
+    </section>
+  );
+}
 
-      {/* Below note */}
-      <p style={{
-        marginTop: 16, fontSize: '0.68rem', color: '#7a6040',
-        letterSpacing: '0.08em', textAlign: 'center', lineHeight: 1.7,
-      }}>
-        Issued: 07/08/2025 &nbsp;·&nbsp; <strong>{v.legalBusinessName}</strong> &nbsp;·&nbsp; naviro.online
-        <br />
-        <span style={{ fontSize: '0.6rem', opacity: 0.7 }}>
-          To switch back to the main website: set <code style={{ background: 'rgba(0,0,0,0.08)', padding: '1px 5px', borderRadius: 3 }}>siteMode: "live"</code> in config/site.config.js
-        </span>
-      </p>
+// ── PRIVACY POLICY ─────────────────────────────────────────────
+function PrivacyPage() {
+  return (
+    <section style={{ padding: '80px 24px' }}>
+      <div style={{ maxWidth: 800, margin: '0 auto' }}>
+        <h1 style={{ fontSize: '2rem', fontWeight: 900, color: C.text, marginBottom: 8 }}>Privacy Policy</h1>
+        <p style={{ fontSize: '0.8rem', color: C.faint, marginBottom: 40 }}>Last updated: June 2025 · {BIZ.legal}</p>
+        {[
+          ['1. About Us', `This Privacy Policy applies to ${BIZ.legal} (also referred to as "CAB", "we", "our", or "us"), a registered educational consultancy operating under Trade License ${BIZ.license} issued by ${BIZ.authority}, Dhaka, Bangladesh. Our registered address is: ${BIZ.address}.`],
+          ['2. Information We Collect', 'We may collect personal information including your name, email address, phone number, academic qualifications, passport details (for visa applications), and enquiry details. We collect this information when you contact us, fill out a consultation form, or use our services.'],
+          ['3. How We Use Your Information', `${BIZ.legal} uses your information to: provide educational consultancy services; respond to enquiries; process university and visa applications on your behalf; send relevant updates about study abroad opportunities; and comply with legal obligations.`],
+          ['4. Data Sharing', 'We do not sell or rent your personal data to third parties. We may share your data with partner universities, embassies, or visa processing authorities solely for the purpose of delivering our educational consultancy services, with your consent.'],
+          ['5. Data Security', 'We take reasonable steps to protect your personal information from unauthorized access, disclosure, alteration, or destruction. However, no method of transmission over the internet is 100% secure.'],
+          ['6. Your Rights', 'You have the right to access, correct, or request deletion of your personal data held by us. To exercise these rights, contact us at: ' + BIZ.email],
+          ['7. Cookies', 'Our website may use cookies to improve your browsing experience. You can disable cookies in your browser settings at any time.'],
+          ['8. Contact', `For any privacy-related questions, contact ${BIZ.legal} at: ${BIZ.email} or call ${BIZ.phones[0]}.`],
+        ].map(([title, body]) => (
+          <div key={title} style={{ marginBottom: 32 }}>
+            <h2 style={{ fontSize: '1.05rem', fontWeight: 700, color: C.text, marginBottom: 8 }}>{title}</h2>
+            <p style={{ fontSize: '0.88rem', color: C.muted, lineHeight: 1.8 }}>{body}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
 
-    </div>
+// ── TERMS OF SERVICE ───────────────────────────────────────────
+function TermsPage() {
+  return (
+    <section style={{ padding: '80px 24px' }}>
+      <div style={{ maxWidth: 800, margin: '0 auto' }}>
+        <h1 style={{ fontSize: '2rem', fontWeight: 900, color: C.text, marginBottom: 8 }}>Terms of Service</h1>
+        <p style={{ fontSize: '0.8rem', color: C.faint, marginBottom: 40 }}>Last updated: June 2025 · {BIZ.legal}</p>
+        {[
+          ['1. Acceptance of Terms', `By using the services of ${BIZ.legal} ("CAREER ASSOCIATES BANGLADESH-CAB"), you agree to be bound by these Terms of Service. If you do not agree, please do not use our services.`],
+          ['2. Services Provided', `${BIZ.legal} provides educational consultancy services including study abroad counseling, university application assistance, test preparation guidance (IELTS, TOEFL, GRE), visa documentation support, and career counseling. We are a registered entity under Trade License ${BIZ.license} issued by ${BIZ.authority}.`],
+          ['3. No Guarantee of Admission', 'While we provide our best professional guidance, CAREER ASSOCIATES BANGLADESH-CAB cannot guarantee admission to any university or approval of any visa application. Decisions rest solely with the respective institutions and government authorities.'],
+          ['4. Client Responsibilities', 'Clients must provide accurate and complete information. Any misinformation that results in application rejection or visa denial is the sole responsibility of the client. CAREER ASSOCIATES BANGLADESH-CAB shall not be liable for consequences arising from false information.'],
+          ['5. Fees & Payments', 'Our service fees will be communicated clearly before engagement. Fees once paid for services rendered are non-refundable. Refund terms for specific packages, if applicable, will be stated in your service agreement.'],
+          ['6. Confidentiality', 'We treat all client information with strict confidentiality in accordance with our Privacy Policy.'],
+          ['7. Limitation of Liability', 'CAREER ASSOCIATES BANGLADESH-CAB shall not be liable for indirect, incidental, or consequential damages arising from the use of our services or reliance on our advice.'],
+          ['8. Governing Law', 'These terms are governed by the laws of the People\'s Republic of Bangladesh. Any disputes shall be subject to the jurisdiction of courts in Dhaka, Bangladesh.'],
+          ['9. Contact', `For questions about these terms, contact us at: ${BIZ.email} or ${BIZ.phones[0]}. Registered Address: ${BIZ.address}`],
+        ].map(([title, body]) => (
+          <div key={title} style={{ marginBottom: 32 }}>
+            <h2 style={{ fontSize: '1.05rem', fontWeight: 700, color: C.text, marginBottom: 8 }}>{title}</h2>
+            <p style={{ fontSize: '0.88rem', color: C.muted, lineHeight: 1.8 }}>{body}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ── ROOT COMPONENT ─────────────────────────────────────────────
+export default function VerificationPage() {
+  const [page, setPage] = useState('home');
+
+  const content = {
+    home:     <HomePage setPage={setPage} />,
+    services: <HomePage setPage={setPage} />,
+    contact:  <ContactPage />,
+    privacy:  <PrivacyPage />,
+    terms:    <TermsPage />,
+  };
+
+  return (
+    <Layout page={page} setPage={setPage}>
+      {content[page] || content.home}
+    </Layout>
   );
 }
