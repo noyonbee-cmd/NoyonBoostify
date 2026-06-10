@@ -1,6 +1,7 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import siteConfig from '@/config/site.config';
+import VerificationPage from '@/components/VerificationPage';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import Hero from '@/sections/01_Hero';
@@ -12,49 +13,40 @@ import Testimonials from '@/sections/06_Testimonials';
 import FinalCTA from '@/sections/07_FinalCTA';
 import StickyWABar from '@/components/layout/StickyWABar';
 
+// ─────────────────────────────────────────────────────────────────
+//  SITE MODE SWITCH  —  one line in config/site.config.js:
+//    siteMode: "verification"  →  trade licence holding page (Meta)
+//    siteMode: "live"          →  full Noyon Boostify website
+// ─────────────────────────────────────────────────────────────────
+
 export default function Home() {
+  const isVerification = siteConfig.siteMode === 'verification';
   const [heroScrolled, setHeroScrolled] = useState(false);
 
   useEffect(() => {
-    // Intersection observer for reveal animations
+    // Skip all observers when in verification mode
+    if (isVerification) return;
+
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('revealed');
-          }
-        });
-      },
+      (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('revealed')),
       { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
     );
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach((el) => observer.observe(el));
 
-    const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
-    revealEls.forEach((el) => observer.observe(el));
-
-    // Neon underline trigger
     const ulObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('active');
-          }
-        });
-      },
+      (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('active')),
       { threshold: 0.5 }
     );
     document.querySelectorAll('.neon-underline').forEach((el) => ulObserver.observe(el));
 
-    // Process timeline
     const lineObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('active');
-            // Trigger nodes
-            const nodes = document.querySelectorAll('.process-node');
-            nodes.forEach((node, i) => {
-              setTimeout(() => node.classList.add('visible'), i * 250 + 400);
-            });
+            document.querySelectorAll('.process-node').forEach((node, i) =>
+              setTimeout(() => node.classList.add('visible'), i * 250 + 400)
+            );
           }
         });
       },
@@ -63,10 +55,7 @@ export default function Home() {
     const processLine = document.querySelector('.process-line-fill');
     if (processLine) lineObserver.observe(processLine.parentElement);
 
-    // Hero scroll
-    const handleScroll = () => {
-      setHeroScrolled(window.scrollY > 400);
-    };
+    const handleScroll = () => setHeroScrolled(window.scrollY > 400);
     window.addEventListener('scroll', handleScroll);
 
     return () => {
@@ -75,8 +64,12 @@ export default function Home() {
       lineObserver.disconnect();
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [isVerification]);
 
+  // ── Verification mode ─────────────────────────────────────────
+  if (isVerification) return <VerificationPage />;
+
+  // ── Live mode — full website ──────────────────────────────────
   return (
     <>
       <Navbar />

@@ -3,8 +3,12 @@
 
 const siteConfig = {
 
+  // ── Site Mode ─────────────────────────────────────────────────────────────────
+  // "verification" → minimal holding page with legal business name (for Meta)
+  // "live"         → full website (flip back once Meta is done)
+  siteMode: "verification",
+
   // ── Meta Business Verification ─────────────────────────────────────────────
-  // Set to false and redeploy once Meta verification is complete.
   verification: {
     showBusinessName: true,
     legalBusinessName: "Équinoxe Tv",
