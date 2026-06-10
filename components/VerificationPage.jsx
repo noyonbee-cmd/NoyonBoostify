@@ -14,8 +14,7 @@ const BIZ = {
   email:    'shamsmanna@gmail.com',
   proprietor: 'Moh Samsuddin Manna',
   authority:  'Dhaka North City Corporation',
-  validTill:  '30 June 2026',
-  metaBrand:  'Équinoxe Tv',
+  validTill:  '30 June 2026'
 };
 
 const C = {
@@ -171,13 +170,7 @@ function Layout({ children, page, setPage }) {
             <div style={{ fontSize: '0.75rem', color: C.faint }}>
               © {new Date().getFullYear()} <strong style={{ color: C.muted }}>{BIZ.legal}</strong>. All rights reserved.
             </div>
-            <div style={{
-              fontSize: '0.72rem', color: C.faint,
-              padding: '4px 12px', border: `1px solid rgba(99,179,237,0.15)`,
-              borderRadius: 20,
-            }}>
-              Also operating as: <span style={{ color: C.muted }}>{BIZ.metaBrand}</span>
-            </div>
+
           </div>
         </div>
       </footer>

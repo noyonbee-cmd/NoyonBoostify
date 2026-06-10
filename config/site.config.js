@@ -11,7 +11,7 @@ const siteConfig = {
   // ── Meta Business Verification ─────────────────────────────────────────────
   verification: {
     showBusinessName: true,
-    legalBusinessName: "Équinoxe Tv",
+    legalBusinessName: "CAREER ASSOCIATES BANGLADESH-CAB",
   },
 
 
