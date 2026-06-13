@@ -6,7 +6,7 @@ const siteConfig = {
   // ── Site Mode ─────────────────────────────────────────────────────────────────
   // "verification" → minimal holding page with legal business name (for Meta)
   // "live"         → full website (flip back once Meta is done)
-  siteMode: "verification",
+  siteMode: "live",
 
   // ── Meta Business Verification ─────────────────────────────────────────────
   verification: {
