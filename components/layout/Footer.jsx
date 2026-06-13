@@ -24,10 +24,10 @@ export default function Footer() {
         </div>
 
         <div style={{ display:'flex', gap:24, justifyContent:'center', flexWrap:'wrap', marginBottom:48 }}>
-          <a href={siteConfig.contact.whatsappUrl} target="_blank" rel="noopener noreferrer" style={{ color:'var(--color-text-muted)', textDecoration:'none', fontSize:'0.9rem', display:'flex', alignItems:'center', gap:8, transition:'color 0.2s' }} onMouseEnter={e=>e.target.style.color='var(--color-accent)'} onMouseLeave={e=>e.target.style.color='var(--color-text-muted)'}>
+          <a href={siteConfig.contact.whatsappUrl} target="_blank" rel="noopener noreferrer" style={{ color:'var(--color-text-muted)', textDecoration:'none', fontSize:'0.9rem', display:'flex', alignItems:'center', gap:8, transition:'color 0.2s' }} onMouseEnter={e=>e.currentTarget.style.color='var(--color-accent)'} onMouseLeave={e=>e.currentTarget.style.color='var(--color-text-muted)'}>
             WhatsApp
           </a>
-          <a href={`mailto:${siteConfig.contact.email}`} style={{ color:'var(--color-text-muted)', textDecoration:'none', fontSize:'0.9rem', display:'flex', alignItems:'center', gap:8, transition:'color 0.2s' }} onMouseEnter={e=>e.target.style.color='var(--color-accent)'} onMouseLeave={e=>e.target.style.color='var(--color-text-muted)'}>
+          <a href={`mailto:${siteConfig.contact.email}`} style={{ color:'var(--color-text-muted)', textDecoration:'none', fontSize:'0.9rem', display:'flex', alignItems:'center', gap:8, transition:'color 0.2s' }} onMouseEnter={e=>e.currentTarget.style.color='var(--color-accent)'} onMouseLeave={e=>e.currentTarget.style.color='var(--color-text-muted)'}>
             Email Us
           </a>
         </div>

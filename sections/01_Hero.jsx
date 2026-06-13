@@ -15,12 +15,13 @@ export default function Hero() {
       h1.innerHTML = words.map((word, i) =>
         `<span class="hero-word" style="opacity:0;transform:translateY(24px) rotateX(-12deg);display:inline-block;margin-right:0.22em;transition:opacity 0.55s ease ${i*0.07+0.3}s,transform 0.55s ease ${i*0.07+0.3}s;transform-origin:bottom">${word}</span>`
       ).join('');
-      requestAnimationFrame(() => {
+      // Double RAF: first frame paints opacity:0, second triggers the transition
+      requestAnimationFrame(() => requestAnimationFrame(() => {
         h1.querySelectorAll('.hero-word').forEach(w => {
           w.style.opacity = '1';
           w.style.transform = 'translateY(0) rotateX(0)';
         });
-      });
+      }));
     }
   }, []);
 
