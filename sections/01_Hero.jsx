@@ -85,7 +85,7 @@ export default function Hero() {
             </p>
 
             {/* CTAs */}
-            <div style={{ display:'flex', gap:14, flexWrap:'wrap', opacity:0, animation:'slide-up 0.6s ease 0.8s forwards' }}>
+            <div className="hero-cta-group" style={{ display:'flex', gap:14, flexWrap:'wrap', opacity:0, animation:'slide-up 0.6s ease 0.8s forwards' }}>
               <a href={siteConfig.contact.whatsappUrl} target="_blank" rel="noopener noreferrer" className="btn-primary" id="hero-cta">
                 <WAIcon /> Start Scaling on WhatsApp ↗
               </a>
@@ -221,6 +221,32 @@ export default function Hero() {
         </div>
       </div>
 
+      {/* Mobile stat strip — shows instead of visual on small screens */}
+      <div className="hero-stat-strip" style={{
+        display: 'none',
+        gap: 0,
+        margin: '28px 24px 0',
+        border: '1px solid rgba(45,140,255,0.18)',
+        borderRadius: 12,
+        overflow: 'hidden',
+        background: 'rgba(13,27,56,0.6)',
+        backdropFilter: 'blur(12px)',
+      }}>
+        {[
+          { n: '3.8×', l: 'Avg ROAS', c: 'var(--color-accent)' },
+          { n: '62%', l: 'CPA Drop', c: 'var(--color-green)' },
+          { n: '+240%', l: 'Revenue', c: 'var(--color-accent)' },
+        ].map((s, i) => (
+          <div key={s.l} style={{
+            flex: 1, padding: '14px 10px', textAlign: 'center',
+            borderRight: i < 2 ? '1px solid rgba(45,140,255,0.12)' : 'none',
+          }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '1.2rem', color: s.c, lineHeight: 1 }}>{s.n}</div>
+            <div style={{ fontSize: '0.65rem', color: 'var(--color-text-faint)', marginTop: 3 }}>{s.l}</div>
+          </div>
+        ))}
+      </div>
+
       {/* Scroll cue */}
       <div style={{ position:'absolute', bottom:28, left:'50%', transform:'translateX(-50%)', display:'flex', flexDirection:'column', alignItems:'center', gap:6, color:'var(--color-text-faint)', fontSize:'0.72rem', fontFamily:'var(--font-mono)', opacity:0, animation:'fade-in 1s ease 1.8s forwards' }}>
         <span style={{ letterSpacing:'0.1em' }}>SCROLL</span>
@@ -229,11 +255,11 @@ export default function Hero() {
 
       <style>{`
         @media (max-width: 768px) {
-          .hero-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
-          .hero-visual { height: 380px !important; margin-top: 24px; transform: scale(0.85); overflow: visible; }
+          .hero-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+          .hero-visual { height: 340px !important; margin-top: 0; transform: scale(0.8); transform-origin: center top; overflow: hidden; }
         }
-        @media (max-width: 480px) {
-          .hero-visual { transform: scale(0.7); transform-origin: left center; }
+        @media (max-width: 640px) {
+          .hero-visual { transform: scale(0.72); transform-origin: center top; }
         }
       `}</style>
     </section>

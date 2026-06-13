@@ -589,3 +589,87 @@ p {
   border-color: rgba(45, 140, 255, 0.3);
   transform: translateY(-4px);
 }
+
+/* ═══════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE — Comprehensive overhaul
+═══════════════════════════════════════════════════════════ */
+
+/* ── Navbar mobile ───────────────────────────────────────── */
+.nav-mobile-menu {
+  display: none;
+  flex-direction: column;
+  background: rgba(10,31,68,0.98);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(45,140,255,0.15);
+  padding: 12px 0 20px;
+}
+.nav-mobile-menu.open { display: flex; }
+.nav-mobile-link {
+  padding: 12px 24px;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  transition: color 0.15s;
+}
+.nav-mobile-link:hover { color: var(--color-accent); }
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: white;
+  border-radius: 2px;
+  transition: all 0.25s ease;
+}
+
+/* ── Section padding ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  .section { padding: 72px 0; }
+  .hamburger { display: flex; }
+  .nav-desktop-cta { display: none !important; }
+  .sticky-wa-bar { display: flex; }
+}
+
+@media (max-width: 480px) {
+  .section { padding: 56px 0; }
+  .container { padding: 0 16px; }
+
+  /* Hero — hide complex visual, show simplified stat strip instead */
+  .hero-visual { display: none !important; }
+  .hero-grid { grid-template-columns: 1fr !important; gap: 0 !important; }
+  .hero-stat-strip { display: flex !important; }
+
+  /* Creative phone mockup */
+  .phone-mockup { width: min(260px, 85vw) !important; }
+
+  /* Footer bottom bar stack */
+  .footer-bottom { flex-direction: column !important; text-align: center; gap: 8px !important; }
+
+  /* Buttons full width on tiny screens */
+  .btn-primary, .btn-ghost { width: 100%; justify-content: center; }
+  .hero-cta-group { flex-direction: column !important; }
+}
+
+@media (max-width: 360px) {
+  .container { padding: 0 12px; }
+}
+
+/* ── Process section mobile toggle fix ───────────────────── */
+@media (max-width: 640px) {
+  .process-desktop { display: none !important; }
+  .process-vertical { display: flex !important; }
+}

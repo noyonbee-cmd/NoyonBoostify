@@ -42,7 +42,7 @@ export default function Process() {
         </div>
 
         {/* Desktop timeline */}
-        <div style={{ overflowX:'auto' }}>
+        <div className="process-desktop" style={{ overflowX:'auto' }}>
           <div style={{ display:'grid', gridTemplateColumns:`repeat(${siteConfig.process.length},1fr)`, gap:0, minWidth:640, position:'relative' }}>
             <div className="process-line" style={{ top:28, left:'10%', right:'10%' }}>
               <div ref={lineRef} className="process-line-fill" />
@@ -77,12 +77,7 @@ export default function Process() {
         </div>
       </div>
 
-      <style>{`
-        @media (max-width: 640px) {
-          #process-section > div:first-child { display: none !important; }
-          .process-vertical { display: flex !important; }
-        }
-      `}</style>
+      {/* Mobile styles handled in globals.css via .process-desktop and .process-vertical */}
     </section>
   );
 }

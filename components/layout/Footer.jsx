@@ -44,7 +44,7 @@ export default function Footer() {
 
         <div style={{ height:1, background:'rgba(255,255,255,0.05)', marginBottom:32 }} />
 
-        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:16, color:'var(--color-text-faint)', fontSize:'0.82rem' }}>
+        <div className="footer-bottom" style={{ display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:16, color:'var(--color-text-faint)', fontSize:'0.82rem' }}>
           <div>© {new Date().getFullYear()} {siteConfig.brand.fullName}. All rights reserved.</div>
           <div style={{ display:'flex', alignItems:'center', gap:6 }}>Made with <span style={{ color:'#FF4A4A' }}>❤</span> in Bangladesh</div>
         </div>

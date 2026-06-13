@@ -42,7 +42,7 @@ export default function Creative() {
           {/* Right: phone mockup */}
           <div className="reveal-right" style={{ display:'flex', justifyContent:'center' }}>
             <div
-              style={{ width:300, background:'rgba(13,27,56,0.6)', border:'1px solid rgba(45,140,255,0.2)', borderRadius:36, padding:10, boxShadow:'0 24px 80px rgba(45,140,255,0.2)', transition:'transform 0.35s ease, box-shadow 0.35s ease', position:'relative' }}
+              className="phone-mockup" style={{ width:300, background:'rgba(13,27,56,0.6)', border:'1px solid rgba(45,140,255,0.2)', borderRadius:36, padding:10, boxShadow:'0 24px 80px rgba(45,140,255,0.2)', transition:'transform 0.35s ease, box-shadow 0.35s ease', position:'relative' }}
               onMouseEnter={e => { e.currentTarget.style.transform='scale(1.04) rotate(1deg)'; e.currentTarget.style.boxShadow='0 32px 100px rgba(45,140,255,0.35)'; }}
               onMouseLeave={e => { e.currentTarget.style.transform='scale(1) rotate(0)'; e.currentTarget.style.boxShadow='0 24px 80px rgba(45,140,255,0.2)'; }}
             >

@@ -3,15 +3,29 @@ import { useState, useEffect } from 'react';
 import siteConfig from '@/config/site.config';
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
+  const [scrolled, setScrolled]   = useState(false);
+  const [menuOpen, setMenuOpen]   = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 80);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 80);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Close menu on route-style scroll-to
+  const scrollTo = (id) => {
+    setMenuOpen(false);
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const navLinks = [
+    { label: 'Results',  id: 'stats' },
+    { label: 'Services', id: 'services' },
+    { label: 'Process',  id: 'process' },
+    { label: 'Creative', id: 'creative' },
+    { label: 'Reviews',  id: 'testimonials' },
+  ];
 
   return (
     <nav style={{
@@ -19,70 +33,128 @@ export default function Navbar() {
       top: 0, left: 0, right: 0,
       zIndex: 999,
       transition: 'all 0.3s ease',
-      background: scrolled ? 'rgba(10, 31, 68, 0.65)' : 'transparent',
-      backdropFilter: scrolled ? 'blur(20px)' : 'none',
-      WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
-      borderBottom: scrolled ? '1px solid rgba(45,140,255,0.15)' : '1px solid transparent',
-      padding: scrolled ? '12px 0' : '20px 0',
+      background: scrolled || menuOpen ? 'rgba(10,31,68,0.92)' : 'transparent',
+      backdropFilter: scrolled || menuOpen ? 'blur(20px)' : 'none',
+      WebkitBackdropFilter: scrolled || menuOpen ? 'blur(20px)' : 'none',
+      borderBottom: scrolled || menuOpen ? '1px solid rgba(45,140,255,0.15)' : '1px solid transparent',
     }}>
-      <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        
-        {/* Logo / Brand */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }} onClick={() => window.scrollTo(0,0)}>
-          {/* Custom generic SVG logo resembling 'Arrow Mark' from PRD */}
-          <div style={{ width: 36, height: 36, position: 'relative' }}>
-            <svg viewBox="0 0 40 40" fill="none" style={{ width: '100%', height: '100%' }}>
+      {/* ── Main bar ── */}
+      <div className="container" style={{
+        display: 'flex', alignItems: 'center',
+        justifyContent: 'space-between',
+        height: scrolled ? 60 : 72,
+        transition: 'height 0.3s ease',
+      }}>
+
+        {/* Logo */}
+        <div
+          style={{ display:'flex', alignItems:'center', gap:10, cursor:'pointer' }}
+          onClick={() => window.scrollTo({ top:0, behavior:'smooth' })}
+        >
+          <div style={{ width:34, height:34 }}>
+            <svg viewBox="0 0 40 40" fill="none" style={{ width:'100%', height:'100%' }}>
               <path d="M10 30L20 10L24 18" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M20 10L30 30" stroke="#2D8CFF" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
-          <div style={{ 
-            fontFamily: 'var(--font-heading)', 
-            fontWeight: 800, 
-            fontSize: '1.25rem', 
-            color: 'white',
-            letterSpacing: 'var(--ls-tight)' 
+          <div style={{
+            fontFamily:'var(--font-heading)', fontWeight:800,
+            fontSize:'1.15rem', color:'white', letterSpacing:'var(--ls-tight)',
           }}>
             {siteConfig.brand.navName}
           </div>
         </div>
 
+        {/* Desktop nav links */}
+        <div style={{ display:'flex', alignItems:'center', gap:4 }} className="nav-links-desktop">
+          {navLinks.map(n => (
+            <button key={n.id} onClick={() => scrollTo(n.id)} style={{
+              background:'none', border:'none', cursor:'pointer',
+              color:'var(--color-text-muted)', fontFamily:'var(--font-body)',
+              fontWeight:500, fontSize:'0.85rem', padding:'6px 12px',
+              borderRadius:6, transition:'color 0.15s',
+            }}
+            onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
+            onMouseLeave={e => e.currentTarget.style.color = 'var(--color-text-muted)'}
+            >
+              {n.label}
+            </button>
+          ))}
+        </div>
+
         {/* Desktop CTA */}
-        <a 
-          href={siteConfig.contact.whatsappUrl} 
-          target="_blank" 
-          rel="noopener noreferrer"
+        <a
+          href={siteConfig.contact.whatsappUrl}
+          target="_blank" rel="noopener noreferrer"
+          className="nav-desktop-cta"
           style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 8,
-            padding: '10px 20px',
-            background: 'var(--color-bg-deep)',
-            border: '1px solid var(--color-accent)',
-            borderRadius: 8,
-            color: 'white',
-            fontFamily: 'var(--font-heading)',
-            fontWeight: 700,
-            fontSize: '0.85rem',
-            textDecoration: 'none',
-            boxShadow: 'var(--glow-blue)',
-            transition: 'all 0.25s ease'
+            display:'inline-flex', alignItems:'center', gap:8,
+            padding:'9px 18px',
+            background:'var(--color-bg-deep)',
+            border:'1px solid var(--color-accent)',
+            borderRadius:8, color:'white',
+            fontFamily:'var(--font-heading)', fontWeight:700,
+            fontSize:'0.85rem', textDecoration:'none',
+            boxShadow:'var(--glow-blue)', transition:'all 0.25s ease',
           }}
           onMouseEnter={e => {
-            e.currentTarget.style.transform = 'translateY(-2px)';
             e.currentTarget.style.background = 'var(--gradient-cta)';
-            e.currentTarget.style.boxShadow = 'var(--glow-blue-intense)';
+            e.currentTarget.style.transform = 'translateY(-2px)';
           }}
           onMouseLeave={e => {
-            e.currentTarget.style.transform = 'translateY(0)';
             e.currentTarget.style.background = 'var(--color-bg-deep)';
-            e.currentTarget.style.boxShadow = 'var(--glow-blue)';
+            e.currentTarget.style.transform = 'translateY(0)';
           }}
         >
           <WAIcon /> WhatsApp Us
         </a>
 
+        {/* Hamburger — mobile only */}
+        <button
+          className="hamburger"
+          onClick={() => setMenuOpen(o => !o)}
+          aria-label="Toggle menu"
+        >
+          <span style={{ transform: menuOpen ? 'rotate(45deg) translateY(7px)' : 'none' }} />
+          <span style={{ opacity: menuOpen ? 0 : 1 }} />
+          <span style={{ transform: menuOpen ? 'rotate(-45deg) translateY(-7px)' : 'none' }} />
+        </button>
       </div>
+
+      {/* ── Mobile dropdown ── */}
+      <div className={`nav-mobile-menu ${menuOpen ? 'open' : ''}`}>
+        {navLinks.map(n => (
+          <button key={n.id} className="nav-mobile-link" onClick={() => scrollTo(n.id)}>
+            {n.label}
+          </button>
+        ))}
+        <div style={{ padding:'12px 24px 0' }}>
+          <a
+            href={siteConfig.contact.whatsappUrl}
+            target="_blank" rel="noopener noreferrer"
+            onClick={() => setMenuOpen(false)}
+            style={{
+              display:'flex', alignItems:'center', justifyContent:'center', gap:8,
+              padding:'12px', borderRadius:8, textDecoration:'none',
+              background:'var(--gradient-cta)', color:'white',
+              fontFamily:'var(--font-heading)', fontWeight:700, fontSize:'0.95rem',
+              boxShadow:'var(--glow-blue)',
+            }}
+          >
+            <WAIcon /> Chat on WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <style>{`
+        @media (min-width: 769px) {
+          .hamburger { display: none !important; }
+          .nav-links-desktop { display: flex !important; }
+        }
+        @media (max-width: 768px) {
+          .nav-links-desktop { display: none !important; }
+        }
+      `}</style>
     </nav>
   );
 }
