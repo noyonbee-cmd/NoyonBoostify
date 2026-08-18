@@ -11,7 +11,7 @@ const siteConfig = {
   // ── Meta Business Verification ─────────────────────────────────────────────
   verification: {
     showBusinessName: true,
-    legalBusinessName: "CAREER ASSOCIATES BANGLADESH-CAB",
+    legalBusinessName: "M/S. Maruf Enterprise",
   },
 
 
