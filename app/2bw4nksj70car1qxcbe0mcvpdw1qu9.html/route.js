@@ -1,5 +1,5 @@
 export async function GET() {
-  return new Response('rtb43d7uhaohs6lzz4bizlo8em94gl', {
+  return new Response('2bw4nksj70car1qxcbe0mcvpdw1qu9', {
     headers: { 'Content-Type': 'text/html' },
   });
 }
