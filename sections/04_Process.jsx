@@ -1,45 +1,39 @@
 'use client';
 import { useEffect, useRef } from 'react';
 import siteConfig from '@/config/site.config';
+import AmbientOrb from '@/components/ui/AmbientOrb';
+import SectionHeading from '@/components/ui/SectionHeading';
+import { observeOnce } from '@/lib/scrollReveal';
 
 export default function Process() {
   const lineRef = useRef(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) {
-        if (lineRef.current) lineRef.current.style.width = '100%';
-        document.querySelectorAll('.process-node').forEach((n, i) =>
-          setTimeout(() => n.classList.add('visible'), i * 260 + 350)
-        );
-        document.querySelectorAll('.process-content').forEach((c, i) =>
-          setTimeout(() => { c.style.opacity='1'; c.style.transform='translateY(0)'; }, i * 260 + 650)
-        );
-        observer.disconnect();
-      }
+    const observer = observeOnce(document.getElementById('process-section'), () => {
+      if (lineRef.current) lineRef.current.style.width = '100%';
+      document.querySelectorAll('.process-node').forEach((n, i) =>
+        setTimeout(() => n.classList.add('visible'), i * 260 + 350)
+      );
+      document.querySelectorAll('.process-content').forEach((c, i) =>
+        setTimeout(() => { c.style.opacity='1'; c.style.transform='translateY(0)'; }, i * 260 + 650)
+      );
     }, { threshold: 0.2 });
-    const el = document.getElementById('process-section');
-    if (el) observer.observe(el);
-    return () => observer.disconnect();
+    return () => observer?.disconnect();
   }, []);
 
   return (
     <section id="process" className="section" style={{ background:'var(--color-bg-alt)' }}>
-      <div className="ambient-orb" style={{ width:500, height:500, background:'rgba(10,31,68,0.7)', top:'10%', left:'-8%', animationDuration:'22s' }} />
-      <div className="ambient-orb" style={{ width:350, height:350, background:'rgba(0,255,157,0.05)', bottom:'5%', right:'5%', animationDelay:'-8s' }} />
+      <AmbientOrb size={500} style={{ background:'rgba(10,31,68,0.7)', top:'10%', left:'-8%', animationDuration:'22s' }} />
+      <AmbientOrb size={350} style={{ background:'rgba(0,255,157,0.05)', bottom:'5%', right:'5%', animationDelay:'-8s' }} />
 
       <div className="container" style={{ position:'relative', zIndex:1 }} id="process-section">
-        <div style={{ textAlign:'center', marginBottom:72 }}>
-          <div className="eyebrow reveal" style={{ justifyContent:'center' }}>Our Process</div>
-          <h2 className="section-title reveal" style={{ textAlign:'center' }}>
-            Most Agencies Run Ads.{' '}
-            <span className="gradient-text">We Build Ad Systems.</span>
-          </h2>
-          <p className="section-subtitle reveal" style={{ margin:'16px auto 0', textAlign:'center' }}>
-            A repeatable 5-step framework that turns ad budgets into predictable revenue.
-          </p>
-          <span className="neon-underline" style={{ margin:'16px auto 0' }} />
-        </div>
+        <SectionHeading
+          eyebrow="Our Process"
+          title="Most Agencies Run Ads."
+          highlight="We Build Ad Systems."
+          subtitle="A repeatable 5-step framework that turns ad budgets into predictable revenue."
+          marginBottom={72}
+        />
 
         {/* Desktop timeline */}
         <div className="process-desktop" style={{ overflowX:'auto' }}>

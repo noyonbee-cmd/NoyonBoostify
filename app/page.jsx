@@ -1,6 +1,7 @@
 'use client';
 import { useEffect } from 'react';
 import siteConfig from '@/config/site.config';
+import { revealOnScroll } from '@/lib/scrollReveal';
 import VerificationPage from '@/components/VerificationPage';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -27,18 +28,13 @@ export default function Home() {
     if (isVerification) return;
 
     // Reveal on scroll
-    const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('revealed')),
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
-    );
-    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach((el) => observer.observe(el));
+    const observer = revealOnScroll('.reveal, .reveal-left, .reveal-right', 'revealed', {
+      threshold: 0.12,
+      rootMargin: '0px 0px -40px 0px',
+    });
 
     // Neon underline trigger
-    const ulObserver = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('active')),
-      { threshold: 0.5 }
-    );
-    document.querySelectorAll('.neon-underline').forEach((el) => ulObserver.observe(el));
+    const ulObserver = revealOnScroll('.neon-underline', 'active', { threshold: 0.5 });
 
     return () => {
       observer.disconnect();

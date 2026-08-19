@@ -1,4 +1,5 @@
 'use client';
+import AmbientOrb from '@/components/ui/AmbientOrb';
 
 const highlights = [
   { icon:'🎯', title:'Research-First Scripts', desc:'Every creative starts with audience intel — what they fear, desire, and believe. We script before we design.' },
@@ -9,8 +10,8 @@ const highlights = [
 export default function Creative() {
   return (
     <section id="creative" className="section mesh-bg">
-      <div className="ambient-orb" style={{ width:500, height:500, background:'rgba(0,255,157,0.06)', top:'5%', right:'-8%', animationDelay:'-4s' }} />
-      <div className="ambient-orb" style={{ width:400, height:400, background:'rgba(45,140,255,0.08)', bottom:'-5%', left:'0', animationDelay:'-11s' }} />
+      <AmbientOrb size={500} style={{ background:'rgba(0,255,157,0.06)', top:'5%', right:'-8%', animationDelay:'-4s' }} />
+      <AmbientOrb size={400} style={{ background:'rgba(45,140,255,0.08)', bottom:'-5%', left:'0', animationDelay:'-11s' }} />
 
       <div className="container" style={{ position:'relative', zIndex:1 }}>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:80, alignItems:'center' }} className="creative-grid">
