@@ -26,12 +26,23 @@ export default function Home() {
     // Skip all observers when in verification mode
     if (isVerification) return;
 
+    const revealSelector = '.reveal, .reveal-left, .reveal-right';
+
+    // Without IntersectionObserver the reveal classes never get applied and the
+    // whole page stays invisible, so degrade to showing everything up front.
+    if (typeof IntersectionObserver === 'undefined') {
+      console.warn('[boostify] IntersectionObserver unavailable — revealing all sections without scroll animation');
+      document.querySelectorAll(revealSelector).forEach((el) => el.classList.add('revealed'));
+      document.querySelectorAll('.neon-underline').forEach((el) => el.classList.add('active'));
+      return;
+    }
+
     // Reveal on scroll
     const observer = new IntersectionObserver(
       (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('revealed')),
       { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
     );
-    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach((el) => observer.observe(el));
+    document.querySelectorAll(revealSelector).forEach((el) => observer.observe(el));
 
     // Neon underline trigger
     const ulObserver = new IntersectionObserver(

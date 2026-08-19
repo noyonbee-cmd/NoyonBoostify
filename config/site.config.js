@@ -1,6 +1,38 @@
 // config/site.config.js — v3.0 SINGLE SOURCE OF TRUTH
 // Noyon Boostify × Naviro — "Turn Clicks Into Customers."
 
+const DEFAULT_WHATSAPP = "+8801339462285";
+const DEFAULT_EMAIL     = "hello@noyonboostify.com";
+
+// Contact details come from the environment and are the only conversion path on
+// the page. A malformed value would otherwise render a dead CTA with no signal,
+// so bad input is reported and replaced with the known-good default.
+function resolveWhatsappNumber() {
+  const raw = process.env.NEXT_PUBLIC_WHATSAPP;
+  if (!raw) return DEFAULT_WHATSAPP;
+  if (raw.replace(/\D/g, '').length < 8) {
+    console.error(
+      `[site.config] NEXT_PUBLIC_WHATSAPP ("${raw}") is not a usable phone number — ` +
+      `falling back to ${DEFAULT_WHATSAPP}.`
+    );
+    return DEFAULT_WHATSAPP;
+  }
+  return raw;
+}
+
+function resolveEmail() {
+  const raw = process.env.NEXT_PUBLIC_EMAIL;
+  if (!raw) return DEFAULT_EMAIL;
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(raw)) {
+    console.error(
+      `[site.config] NEXT_PUBLIC_EMAIL ("${raw}") is not a valid email address — ` +
+      `falling back to ${DEFAULT_EMAIL}.`
+    );
+    return DEFAULT_EMAIL;
+  }
+  return raw;
+}
+
 const siteConfig = {
 
   // ── Site Mode ─────────────────────────────────────────────────────────────────
@@ -29,9 +61,9 @@ const siteConfig = {
   },
 
   contact: {
-    whatsappNumber:  process.env.NEXT_PUBLIC_WHATSAPP || "+8801339462285",
+    whatsappNumber:  resolveWhatsappNumber(),
     whatsappMessage: "Hi Noyon Boostify! I want to scale my ads. Can we talk?",
-    email:           process.env.NEXT_PUBLIC_EMAIL || "hello@noyonboostify.com",
+    email:           resolveEmail(),
     get whatsappUrl() {
       return `https://wa.me/${this.whatsappNumber.replace(/\D/g,'')}?text=${encodeURIComponent(this.whatsappMessage)}`;
     },

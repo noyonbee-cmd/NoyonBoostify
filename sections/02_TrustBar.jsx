@@ -8,6 +8,20 @@ function useCountUp(target, duration = 2000, decimals = 0) {
   const ref = useRef(null);
 
   useEffect(() => {
+    const final = decimals ? parseFloat(target.toFixed(decimals)) : Math.round(target);
+
+    // Without IntersectionObserver the counter would sit at 0 forever, so show
+    // the real figure instead of a silently broken stat.
+    if (typeof IntersectionObserver === 'undefined') {
+      console.warn('[boostify] IntersectionObserver unavailable — showing stats without count-up animation');
+      const timer = setTimeout(() => {
+        setStarted(true);
+        setCount(final);
+      }, 0);
+      return () => clearTimeout(timer);
+    }
+
+    let frame;
     const observer = new IntersectionObserver(([e]) => {
       if (e.isIntersecting && !started) {
         setStarted(true);
@@ -16,13 +30,16 @@ function useCountUp(target, duration = 2000, decimals = 0) {
           const p = Math.min((now - t0) / duration, 1);
           const eased = 1 - Math.pow(1 - p, 3);
           setCount(decimals ? parseFloat((eased * target).toFixed(decimals)) : Math.round(eased * target));
-          if (p < 1) requestAnimationFrame(tick);
+          if (p < 1) frame = requestAnimationFrame(tick);
         };
-        requestAnimationFrame(tick);
+        frame = requestAnimationFrame(tick);
       }
     }, { threshold: 0.5 });
     if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      if (frame !== undefined) cancelAnimationFrame(frame);
+    };
   }, [target, duration, decimals, started]);
 
   return [count, ref];
