@@ -1,6 +1,9 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import siteConfig from '@/config/site.config';
+import AmbientOrb from '@/components/ui/AmbientOrb';
+import Badge from '@/components/ui/Badge';
+import SectionHeading from '@/components/ui/SectionHeading';
 
 export default function Testimonials() {
   const [active, setActive] = useState(0);
@@ -22,18 +25,16 @@ export default function Testimonials() {
 
   return (
     <section id="testimonials" className="section section-alt">
-      <div className="ambient-orb" style={{ width:500, height:500, background:'rgba(45,140,255,0.08)', top:'-20%', right:'-10%', animationDelay:'-6s', animationDuration:'20s' }} />
-      <div className="ambient-orb" style={{ width:350, height:350, background:'rgba(0,255,157,0.05)', bottom:'-10%', left:'-5%', animationDelay:'-3s' }} />
+      <AmbientOrb size={500} style={{ background:'rgba(45,140,255,0.08)', top:'-20%', right:'-10%', animationDelay:'-6s', animationDuration:'20s' }} />
+      <AmbientOrb size={350} style={{ background:'rgba(0,255,157,0.05)', bottom:'-10%', left:'-5%', animationDelay:'-3s' }} />
 
       <div className="container" style={{ position:'relative', zIndex:1 }}>
-        <div style={{ textAlign:'center', marginBottom:64 }}>
-          <div className="eyebrow reveal" style={{ justifyContent:'center' }}>Client Results</div>
-          <h2 className="section-title reveal" style={{ textAlign:'center' }}>
-            Real Brands.{' '}
-            <span className="gradient-text">Real Numbers.</span>
-          </h2>
-          <span className="neon-underline" style={{ margin:'12px auto 0' }} />
-        </div>
+        <SectionHeading
+          eyebrow="Client Results"
+          title="Real Brands."
+          highlight="Real Numbers."
+          underlineGap={12}
+        />
 
         {/* Carousel */}
         <div
@@ -72,9 +73,7 @@ export default function Testimonials() {
                 </div>
 
                 {/* Badge based on result color type */}
-                <span className={t.resultType === 'green' ? 'green-badge' : 'blue-badge'}>
-                  {t.result}
-                </span>
+                <Badge type={t.resultType}>{t.result}</Badge>
               </div>
             </div>
           ))}

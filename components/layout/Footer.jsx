@@ -1,5 +1,19 @@
 'use client';
 import siteConfig from '@/config/site.config';
+import { BrandMark } from '@/components/icons';
+import WhatsAppLink from '@/components/ui/WhatsAppLink';
+import { hoverColor } from '@/lib/hover';
+
+const linkStyle = {
+  color: 'var(--color-text-muted)',
+  textDecoration: 'none',
+  fontSize: '0.9rem',
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+  transition: 'color 0.2s',
+};
+const linkHover = hoverColor('var(--color-accent)', 'var(--color-text-muted)');
 
 export default function Footer() {
   return (
@@ -8,12 +22,7 @@ export default function Footer() {
         
         <div style={{ display:'flex', flexDirection:'column', alignItems:'center', textAlign:'center', marginBottom:48 }}>
           {/* Logo */}
-          <div style={{ width: 44, height: 44, marginBottom: 16 }}>
-            <svg viewBox="0 0 40 40" fill="none" style={{ width: '100%', height: '100%' }}>
-              <path d="M10 30L20 10L24 18" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M20 10L30 30" stroke="#2D8CFF" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
+          <BrandMark size={44} style={{ marginBottom: 16 }} />
           
           <h3 style={{ fontFamily:'var(--font-heading)', fontWeight:800, fontSize:'1.4rem', color:'white', marginBottom:8 }}>
             {siteConfig.brand.fullName}
@@ -24,10 +33,10 @@ export default function Footer() {
         </div>
 
         <div style={{ display:'flex', gap:24, justifyContent:'center', flexWrap:'wrap', marginBottom:48 }}>
-          <a href={siteConfig.contact.whatsappUrl} target="_blank" rel="noopener noreferrer" style={{ color:'var(--color-text-muted)', textDecoration:'none', fontSize:'0.9rem', display:'flex', alignItems:'center', gap:8, transition:'color 0.2s' }} onMouseEnter={e=>e.currentTarget.style.color='var(--color-accent)'} onMouseLeave={e=>e.currentTarget.style.color='var(--color-text-muted)'}>
+          <WhatsAppLink style={linkStyle} {...linkHover}>
             WhatsApp
-          </a>
-          <a href={`mailto:${siteConfig.contact.email}`} style={{ color:'var(--color-text-muted)', textDecoration:'none', fontSize:'0.9rem', display:'flex', alignItems:'center', gap:8, transition:'color 0.2s' }} onMouseEnter={e=>e.currentTarget.style.color='var(--color-accent)'} onMouseLeave={e=>e.currentTarget.style.color='var(--color-text-muted)'}>
+          </WhatsAppLink>
+          <a href={`mailto:${siteConfig.contact.email}`} style={linkStyle} {...linkHover}>
             Email Us
           </a>
         </div>

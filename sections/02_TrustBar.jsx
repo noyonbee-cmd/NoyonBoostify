@@ -1,29 +1,27 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import siteConfig from '@/config/site.config';
+import AmbientOrb from '@/components/ui/AmbientOrb';
+import SectionHeading from '@/components/ui/SectionHeading';
+import { observeOnce } from '@/lib/scrollReveal';
 
 function useCountUp(target, duration = 2000, decimals = 0) {
   const [count, setCount] = useState(0);
-  const [started, setStarted] = useState(false);
   const ref = useRef(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting && !started) {
-        setStarted(true);
-        const t0 = performance.now();
-        const tick = (now) => {
-          const p = Math.min((now - t0) / duration, 1);
-          const eased = 1 - Math.pow(1 - p, 3);
-          setCount(decimals ? parseFloat((eased * target).toFixed(decimals)) : Math.round(eased * target));
-          if (p < 1) requestAnimationFrame(tick);
-        };
-        requestAnimationFrame(tick);
-      }
+    const observer = observeOnce(ref.current, () => {
+      const t0 = performance.now();
+      const tick = (now) => {
+        const p = Math.min((now - t0) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        setCount(decimals ? parseFloat((eased * target).toFixed(decimals)) : Math.round(eased * target));
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
     }, { threshold: 0.5 });
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [target, duration, decimals, started]);
+    return () => observer?.disconnect();
+  }, [target, duration, decimals]);
 
   return [count, ref];
 }
@@ -64,7 +62,7 @@ function StatCard({ value, suffix, label, color, delay }) {
 export default function TrustBar() {
   return (
     <section id="stats" className="section" style={{ paddingTop:80, paddingBottom:80, background:'var(--color-bg-alt)' }}>
-      <div className="ambient-orb" style={{ width:500, height:500, background:'rgba(45,140,255,0.07)', top:'-40%', left:'20%', animationDuration:'20s' }} />
+      <AmbientOrb size={500} style={{ background:'rgba(45,140,255,0.07)', top:'-40%', left:'20%', animationDuration:'20s' }} />
 
       <div className="container" style={{ position:'relative', zIndex:1 }}>
         {/* Lock-up line */}
@@ -83,14 +81,13 @@ export default function TrustBar() {
           One mission: make your ads profitable.
         </p>
 
-        <div style={{ textAlign:'center', marginBottom:56 }}>
-          <div className="eyebrow reveal" style={{ justifyContent:'center' }}>Proven Results</div>
-          <h2 className="section-title reveal" style={{ textAlign:'center' }}>
-            Numbers Don't Lie.{' '}
-            <span className="gradient-text">Ours Speak Loudly.</span>
-          </h2>
-          <span className="neon-underline" style={{ margin:'12px auto 0' }} />
-        </div>
+        <SectionHeading
+          eyebrow="Proven Results"
+          title="Numbers Don't Lie."
+          highlight="Ours Speak Loudly."
+          underlineGap={12}
+          marginBottom={56}
+        />
 
         <div className="grid-4">
           {siteConfig.stats.map((s, i) => (
