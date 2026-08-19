@@ -16,7 +16,11 @@ export default function Navbar() {
   const scrollTo = (id) => {
     setMenuOpen(false);
     const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    if (!el) {
+      console.warn(`[boostify] nav target "#${id}" is not on the page — scroll ignored`);
+      return;
+    }
+    el.scrollIntoView({ behavior: 'smooth' });
   };
 
   const navLinks = [

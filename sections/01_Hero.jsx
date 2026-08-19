@@ -10,19 +10,43 @@ export default function Hero() {
 
     // Word-by-word H1 animation
     const h1 = document.querySelector('.hero-h1');
-    if (h1) {
-      const words = h1.getAttribute('data-text').split(' ');
-      h1.innerHTML = words.map((word, i) =>
-        `<span class="hero-word" style="opacity:0;transform:translateY(24px) rotateX(-12deg);display:inline-block;margin-right:0.22em;transition:opacity 0.55s ease ${i*0.07+0.3}s,transform 0.55s ease ${i*0.07+0.3}s;transform-origin:bottom">${word}</span>`
-      ).join('');
-      // Double RAF: first frame paints opacity:0, second triggers the transition
-      requestAnimationFrame(() => requestAnimationFrame(() => {
+    const text = h1?.getAttribute('data-text');
+    if (!h1) {
+      console.warn('[boostify] hero heading (.hero-h1) not found — skipping word animation');
+      return;
+    }
+    if (!text) {
+      // The server-rendered headline is already in the DOM; leave it untouched
+      // rather than replacing it with an empty animated shell.
+      console.warn('[boostify] hero heading is missing data-text — skipping word animation');
+      return;
+    }
+
+    h1.replaceChildren(...text.split(' ').map((word, i) => {
+      const span = document.createElement('span');
+      span.className = 'hero-word';
+      span.textContent = word;
+      span.style.cssText =
+        `opacity:0;transform:translateY(24px) rotateX(-12deg);display:inline-block;margin-right:0.22em;` +
+        `transition:opacity 0.55s ease ${i*0.07+0.3}s,transform 0.55s ease ${i*0.07+0.3}s;transform-origin:bottom`;
+      return span;
+    }));
+
+    // Double RAF: first frame paints opacity:0, second triggers the transition
+    let innerFrame;
+    const outerFrame = requestAnimationFrame(() => {
+      innerFrame = requestAnimationFrame(() => {
         h1.querySelectorAll('.hero-word').forEach(w => {
           w.style.opacity = '1';
           w.style.transform = 'translateY(0) rotateX(0)';
         });
-      }));
-    }
+      });
+    });
+
+    return () => {
+      cancelAnimationFrame(outerFrame);
+      if (innerFrame !== undefined) cancelAnimationFrame(innerFrame);
+    };
   }, []);
 
   return (
