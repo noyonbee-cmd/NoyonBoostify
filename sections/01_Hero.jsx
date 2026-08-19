@@ -11,10 +11,22 @@ export default function Hero() {
     // Word-by-word H1 animation
     const h1 = document.querySelector('.hero-h1');
     if (h1) {
-      const words = h1.getAttribute('data-text').split(' ');
-      h1.innerHTML = words.map((word, i) =>
-        `<span class="hero-word" style="opacity:0;transform:translateY(24px) rotateX(-12deg);display:inline-block;margin-right:0.22em;transition:opacity 0.55s ease ${i*0.07+0.3}s,transform 0.55s ease ${i*0.07+0.3}s;transform-origin:bottom">${word}</span>`
-      ).join('');
+      const words = (h1.getAttribute('data-text') || '').split(' ');
+      h1.replaceChildren(...words.map((word, i) => {
+        const span = document.createElement('span');
+        span.className = 'hero-word';
+        span.textContent = word;
+        const delay = `${i * 0.07 + 0.3}s`;
+        Object.assign(span.style, {
+          opacity: '0',
+          transform: 'translateY(24px) rotateX(-12deg)',
+          display: 'inline-block',
+          marginRight: '0.22em',
+          transition: `opacity 0.55s ease ${delay}, transform 0.55s ease ${delay}`,
+          transformOrigin: 'bottom',
+        });
+        return span;
+      }));
       // Double RAF: first frame paints opacity:0, second triggers the transition
       requestAnimationFrame(() => requestAnimationFrame(() => {
         h1.querySelectorAll('.hero-word').forEach(w => {
